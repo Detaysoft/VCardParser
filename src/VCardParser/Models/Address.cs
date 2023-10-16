@@ -1,4 +1,4 @@
-﻿namespace VCardEncodeDecode.Models
+﻿namespace VCardParser.Models
 {
     public class Address
     {

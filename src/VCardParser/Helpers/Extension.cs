@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using VCardEncodeDecode.Models;
+using VCardParser.Models;
 
-namespace VCardEncodeDecode.Helpers
+namespace VCardParser.Helpers
 {
     public static class Extension
     {

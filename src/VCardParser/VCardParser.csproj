@@ -6,9 +6,10 @@
 		<Nullable>enable</Nullable>
 
 		<PackageId>VCardParser</PackageId>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Title>VCardParser</Title>
-		<Authors>Detaysoft</Authors>	
+		<Authors>Detaysoft</Authors>
+		<Copyright>Detaysoft</Copyright>
 		<RepositoryUrl>https://github.com/Detaysoft/VCardParser</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Detaysoft/VCardParser</PackageProjectUrl>
 		<PackageTags>VCard</PackageTags>
@@ -16,6 +17,12 @@
 			You can perform VCard decode and encode operations by using the contact class in the project.
 		</Description>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+		<None Include="..\..\README.md" Pack="true" PackagePath="README.md"/>
+	</ItemGroup>
 </Project>

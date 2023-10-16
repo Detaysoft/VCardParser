@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
-using VCardEncodeDecode.Helpers;
-using VCardEncodeDecode.Models;
+using VCardParser.Helpers;
+using VCardParser.Models;
 using Xunit;
 
-namespace VCardEncodeDecode.Test
+namespace VCardParser.Test
 {
     public class EncodeDecodeTest
     {

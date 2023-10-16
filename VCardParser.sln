@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B9E5633D-8A8B-451B-BF11-8476CC54D7CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79FFC867-FBDA-4E2E-A5FB-FA4EF83D1E97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{3BB6E5DD-4C45-4673-8D9F-B97D93F459AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCardParser", "src\VCardParser\VCardParser.csproj", "{8AAE25AA-65B7-4DDF-803E-900C1BF27361}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCardParser.Sample", "sample\VCardParser.Sample\VCardParser.Sample.csproj", "{153B3572-CEC8-45BC-9BA6-7263EB430DA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCardParser.Test", "Test\VCardParser.Test\VCardParser.Test.csproj", "{DBF9A03B-A492-4453-9EB7-530FFBFB7750}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AAE25AA-65B7-4DDF-803E-900C1BF27361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AAE25AA-65B7-4DDF-803E-900C1BF27361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AAE25AA-65B7-4DDF-803E-900C1BF27361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AAE25AA-65B7-4DDF-803E-900C1BF27361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{153B3572-CEC8-45BC-9BA6-7263EB430DA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{153B3572-CEC8-45BC-9BA6-7263EB430DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{153B3572-CEC8-45BC-9BA6-7263EB430DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{153B3572-CEC8-45BC-9BA6-7263EB430DA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBF9A03B-A492-4453-9EB7-530FFBFB7750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBF9A03B-A492-4453-9EB7-530FFBFB7750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBF9A03B-A492-4453-9EB7-530FFBFB7750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBF9A03B-A492-4453-9EB7-530FFBFB7750}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8AAE25AA-65B7-4DDF-803E-900C1BF27361} = {79FFC867-FBDA-4E2E-A5FB-FA4EF83D1E97}
+		{153B3572-CEC8-45BC-9BA6-7263EB430DA9} = {3BB6E5DD-4C45-4673-8D9F-B97D93F459AF}
+		{DBF9A03B-A492-4453-9EB7-530FFBFB7750} = {B9E5633D-8A8B-451B-BF11-8476CC54D7CB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0A660EE-A919-4C1E-9F48-616BF233C965}
+	EndGlobalSection
+EndGlobal

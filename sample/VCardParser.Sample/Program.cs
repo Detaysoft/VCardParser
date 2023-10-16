@@ -1,5 +1,5 @@
-﻿using VCardEncodeDecode.Helpers;
-using VCardEncodeDecode.Models;
+﻿using VCardParser.Helpers;
+using VCardParser.Models;
 
 Contact contact = new Contact
 {

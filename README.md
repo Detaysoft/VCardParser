@@ -9,8 +9,8 @@ The nuget packages is available [here](https://www.nuget.org/packages/VCardParse
 
 * Example
 ```C#
-using VCardEncodeDecode.Helpers;
-using VCardEncodeDecode.Models;
+using VCardParser.Helpers;
+using VCardParser.Models;
 
 Contact contact = new Contact
 {
@@ -52,9 +52,7 @@ Contact contact = new Contact
 // encode contact model for creating vcard file
 var encodedVCard = contact.EncodeVCard();
 
-// console output
 Console.WriteLine(encodedVCard);
-
 // exporting vcf file
 File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "filename.vcf"), encodedVCard);
 
