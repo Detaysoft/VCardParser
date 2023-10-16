@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<PackageId>VCardParser</PackageId>
+		<Version>1.0.0</Version>
+		<Title>VCardParser</Title>
+		<Authors>Detaysoft</Authors>	
+		<RepositoryUrl>https://github.com/Detaysoft/VCardParser</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Detaysoft/VCardParser</PackageProjectUrl>
+		<PackageTags>VCard</PackageTags>
+		<Description>
+			You can perform VCard decode and encode operations by using the contact class in the project.
+		</Description>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+</Project>
