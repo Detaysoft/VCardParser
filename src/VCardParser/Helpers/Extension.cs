@@ -7,7 +7,7 @@ namespace VCardParser.Helpers
     {
         const string NewLine = "\r\n";
         const string Separator = ";";
-        const string Header = "BEGIN:VCARD\r\nVERSION:3.0";
+        const string Header = "BEGIN:VCARD\r\nVERSION:4.0";
         const string Name = "N:";
         const string FormattedName = "FN:";
         const string OrganizationName = "ORG:";
