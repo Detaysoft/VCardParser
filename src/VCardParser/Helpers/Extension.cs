@@ -5,23 +5,25 @@ namespace VCardParser.Helpers
 {
     public static class Extension
     {
+        const string Charset = "CHARSET=UTF-8";
+
         const string NewLine = "\r\n";
-        const string Separator = ";";
-        const string Header = "BEGIN:VCARD\r\nVERSION:4.0";
-        const string Name = "N:";
-        const string FormattedName = "FN:";
-        const string OrganizationName = "ORG:";
-        const string TitlePrefix = "TITLE:";
-        const string PhotoPrefix = "PHOTO;ENCODING=b;TYPE=JPEG:";
+        const string Header = "BEGIN:VCARD\r\nVERSION:2.1";
+        const string Name = "N";
+        const string Footer = "END:VCARD";
+        const string FormattedName = "FN";
+        const string OrganizationName = "ORG";
+        const string TitlePrefix = "TITLE";
+        const string PhotoPrefix = "PHOTO;ENCODING=BASE64;TYPE=JPEG";
         const string PhonePrefix = "TEL;type=";
-        const string PhoneSubPrefix = ",VOICE:";
-        const string AddressPrefix = "ADR;type=";
-        const string AddressSubPrefix = ":;;";
+        const string PhoneSubPrefix = ",VOICE";
         const string EmailPrefix = "EMAIL;type=";
         const string WebSitePrefix = "X-ABLabel:";
         const string WebSite = "URL:";
-        const string Footer = "END:VCARD";
+        const string AddressPrefix = "ADR;type=";
+        const string AddressSubPrefix = ":;;";
 
+        const string Separator = ";";
         const string Dot = ".";
         const string TwoDots = ":";
         const string ItemStr = "item";
@@ -111,6 +113,9 @@ namespace VCardParser.Helpers
             if (!string.IsNullOrEmpty(contact.FirstName) || !string.IsNullOrEmpty(contact.LastName))
             {
                 fw.Append(Name);
+                fw.Append(Separator);
+                fw.Append(Charset);
+                fw.Append(TwoDots);
                 fw.Append(contact.LastName);
                 fw.Append(Separator);
                 fw.Append(contact.FirstName);
@@ -122,6 +127,9 @@ namespace VCardParser.Helpers
             if (!string.IsNullOrEmpty(contact.FormattedName))
             {
                 fw.Append(FormattedName);
+                fw.Append(Separator);
+                fw.Append(Charset);
+                fw.Append(TwoDots);
                 fw.Append(contact.FormattedName);
                 fw.Append(NewLine);
             }
@@ -130,6 +138,9 @@ namespace VCardParser.Helpers
             if (!string.IsNullOrEmpty(contact.Organization))
             {
                 fw.Append(OrganizationName);
+                fw.Append(Separator);
+                fw.Append(Charset);
+                fw.Append(TwoDots);
                 fw.Append(contact.Organization);
                 if (!string.IsNullOrEmpty(contact.OrganizationPosition))
                 {
@@ -143,6 +154,9 @@ namespace VCardParser.Helpers
             if (!string.IsNullOrEmpty(contact.Title))
             {
                 fw.Append(TitlePrefix);
+                fw.Append(Separator);
+                fw.Append(Charset);
+                fw.Append(TwoDots);
                 fw.Append(contact.Title);
                 fw.Append(NewLine);
             }
@@ -151,8 +165,8 @@ namespace VCardParser.Helpers
             if (!string.IsNullOrEmpty(contact.Photo))
             {
                 fw.Append(PhotoPrefix);
+                fw.Append(TwoDots);
                 fw.Append(contact.Photo);
-                fw.Append(NewLine);
                 fw.Append(NewLine);
             }
 
@@ -182,6 +196,7 @@ namespace VCardParser.Helpers
                 fw.Append(PhonePrefix);
                 fw.Append(item.Type);
                 fw.Append(PhoneSubPrefix);
+                fw.Append(TwoDots);
                 fw.Append(item.Number);
                 fw.Append(NewLine);
             }
