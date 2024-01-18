@@ -9,7 +9,7 @@ Contact contact = new Contact
     Organization = "Company",
     OrganizationPosition = "Team",
     Title = "Title",
-    Photo = "bae64foto",
+    Photo = "base64foto",
     Emails = new List<EMail>
     {
         new EMail
