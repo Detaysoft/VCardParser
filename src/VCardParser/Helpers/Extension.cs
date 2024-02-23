@@ -14,7 +14,7 @@ namespace VCardParser.Helpers
         const string FormattedName = "FN";
         const string OrganizationName = "ORG";
         const string TitlePrefix = "TITLE";
-        const string PhotoPrefix = "PHOTO;ENCODING=BASE64;TYPE=JPEG";
+        const string PhotoPrefix = "PHOTO;ENCODING=BASE64;TYPE=JPEG:";
         const string PhonePrefix = "TEL;type=";
         const string PhoneSubPrefix = ",VOICE";
         const string EmailPrefix = "EMAIL;type=";
@@ -55,7 +55,6 @@ namespace VCardParser.Helpers
 
             var photoBase64 = splittedVCard.FirstOrDefault(s => s.StartsWith(PhotoPrefix))?.Split(PhotoPrefix).LastOrDefault();
             contact.Photo = !string.IsNullOrWhiteSpace(photoBase64) ? "data:image/jpeg;base64," + photoBase64 : null;
-
 
             var emails = splittedVCard.Where(s => s.StartsWith(EmailPrefix));
             foreach (var item in emails)
@@ -165,7 +164,6 @@ namespace VCardParser.Helpers
             if (!string.IsNullOrEmpty(contact.Photo))
             {
                 fw.Append(PhotoPrefix);
-                fw.Append(TwoDots);
                 fw.Append(contact.Photo);
                 fw.Append(NewLine);
             }
