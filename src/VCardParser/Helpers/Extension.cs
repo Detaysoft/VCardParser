@@ -37,9 +37,9 @@ namespace VCardParser.Helpers
                 Phones = new List<Phone>()
             };
 
-            var splittedVCard = vCard.Split(NewLine).ToList();
+            var splittedVCard = vCard.Replace(Charset + TwoDots, string.Empty).Split(NewLine).ToList();
 
-            contact.FormattedName = splittedVCard.FirstOrDefault(s => s.StartsWith(FormattedName))?.Split(":").LastOrDefault() ?? string.Empty;
+            contact.FormattedName = splittedVCard.FirstOrDefault(s => s.StartsWith(FormattedName))?.Replace(";", ":").Split(":").LastOrDefault() ?? string.Empty;
 
             var names = splittedVCard.FirstOrDefault(s => s.StartsWith(Name))?.Replace(";", ":").Split(":") ?? Array.Empty<string>();
             var firstNames = names.Length > 0 ? names.TakeLast(names.Length - 2) : Array.Empty<string>();
@@ -50,7 +50,7 @@ namespace VCardParser.Helpers
             contact.Organization = organizasion?.Length > 0 ? organizasion[1] : string.Empty;
             contact.OrganizationPosition = organizasion?.Length > 1 ? organizasion[2] : string.Empty;
 
-            var title = splittedVCard.FirstOrDefault(s => s.StartsWith(TitlePrefix))?.Split(":") ?? Array.Empty<string>();
+            var title = splittedVCard.FirstOrDefault(s => s.StartsWith(TitlePrefix))?.Replace(";", ":").Split(":") ?? Array.Empty<string>();
             contact.Title = string.Join(":", title.Length > 0 ? title.TakeLast(title.Length - 1) : Array.Empty<string>());
 
             var photoBase64 = splittedVCard.FirstOrDefault(s => s.StartsWith(PhotoPrefix))?.Split(PhotoPrefix).LastOrDefault();
