@@ -47,8 +47,8 @@ namespace VCardParser.Helpers
             contact.LastName = names[1];
 
             var organizasion = splittedVCard.FirstOrDefault(s => s.StartsWith(OrganizationName))?.Replace(";", ":").Split(":");
-            contact.Organization = organizasion?.Length > 0 ? organizasion[1] : string.Empty;
-            contact.OrganizationPosition = organizasion?.Length > 1 ? organizasion[2] : string.Empty;
+            contact.Organization = organizasion?.Length > 1 ? organizasion[1] : string.Empty;
+            contact.OrganizationPosition = organizasion?.Length > 2 ? organizasion[2] : string.Empty;
 
             var title = splittedVCard.FirstOrDefault(s => s.StartsWith(TitlePrefix))?.Replace(";", ":").Split(":") ?? Array.Empty<string>();
             contact.Title = string.Join(":", title.Length > 0 ? title.TakeLast(title.Length - 1) : Array.Empty<string>());
@@ -189,7 +189,7 @@ namespace VCardParser.Helpers
             }
 
             //Phones
-            foreach (var item in contact.Phones)
+            foreach (var item in contact.Phones ?? new List<Phone>())
             {
                 fw.Append(PhonePrefix);
                 fw.Append(item.Type);

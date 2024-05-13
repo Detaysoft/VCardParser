@@ -51,13 +51,5 @@ namespace VCardParser.Test
         {
             Assert.NotEqual(encodedVCard.Replace("\r\n", ""), decodedVCard.EncodeVCard());
         }
-
-        [Fact]
-        public void PhoneCantNull()
-        {
-            decodedVCard.Phones = null;
-
-            Assert.Throws<NullReferenceException>(() => decodedVCard.EncodeVCard());
-        }
     }
 }
