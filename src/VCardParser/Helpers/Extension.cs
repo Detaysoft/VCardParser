@@ -7,8 +7,12 @@ namespace VCardParser.Helpers
     {
         const string Charset = "CHARSET=UTF-8";
 
-        const string NewLine = "\r\n";
-        const string Header = "BEGIN:VCARD\r\nVERSION:2.1";
+        const string NewLineCrlf = "\r\n";
+        const string NewLineCr = "\r";
+        const string NewLineLf = "\n";
+
+        const string Header = "BEGIN:VCARD";
+        const string Version = "VERSION:2.1";
         const string Name = "N";
         const string Footer = "END:VCARD";
         const string FormattedName = "FN";
@@ -27,6 +31,11 @@ namespace VCardParser.Helpers
         const string Dot = ".";
         const string TwoDots = ":";
         const string ItemStr = "item";
+        const string Blank = " ";
+        const string Transfer = "=";
+        const string Comma = ",";
+
+        const string PhotoPrefixForDecoding = "data:image/jpeg;base64,";
 
         public static Contact DecodeVCard(this string vCard)
         {
@@ -37,29 +46,30 @@ namespace VCardParser.Helpers
                 Phones = new List<Phone>()
             };
 
-            var splittedVCard = vCard.Replace(Charset + TwoDots, string.Empty).Split(NewLine).ToList();
+            var splittedVCard = vCard.Replace(Charset + TwoDots, string.Empty).Replace(NewLineCrlf, NewLineLf).Replace(NewLineCr, NewLineLf).Split(NewLineLf).ToList();
 
-            contact.FormattedName = splittedVCard.FirstOrDefault(s => s.StartsWith(FormattedName))?.Replace(";", ":").Split(":").LastOrDefault() ?? string.Empty;
+            contact.FormattedName = splittedVCard.FirstOrDefault(s => s.StartsWith(FormattedName))?.Replace(Separator, TwoDots).Split(TwoDots).LastOrDefault() ?? string.Empty;
 
-            var names = splittedVCard.FirstOrDefault(s => s.StartsWith(Name))?.Replace(";", ":").Split(":") ?? Array.Empty<string>();
+            var names = splittedVCard.FirstOrDefault(s => s.StartsWith(Name))?.Replace(Separator, TwoDots).Split(TwoDots) ?? Array.Empty<string>();
             var firstNames = names.Length > 0 ? names.TakeLast(names.Length - 2) : Array.Empty<string>();
-            contact.FirstName = string.Join(" ", firstNames.Where(f => !string.IsNullOrWhiteSpace(f)));
+            contact.FirstName = string.Join(Blank, firstNames.Where(f => !string.IsNullOrWhiteSpace(f)));
             contact.LastName = names[1];
 
-            var organizasion = splittedVCard.FirstOrDefault(s => s.StartsWith(OrganizationName))?.Replace(";", ":").Split(":");
+            var organizasion = splittedVCard.FirstOrDefault(s => s.StartsWith(OrganizationName))?.Replace(Separator, TwoDots).Split(TwoDots);
             contact.Organization = organizasion?.Length > 1 ? organizasion[1] : string.Empty;
             contact.OrganizationPosition = organizasion?.Length > 2 ? organizasion[2] : string.Empty;
 
-            var title = splittedVCard.FirstOrDefault(s => s.StartsWith(TitlePrefix))?.Replace(";", ":").Split(":") ?? Array.Empty<string>();
-            contact.Title = string.Join(":", title.Length > 0 ? title.TakeLast(title.Length - 1) : Array.Empty<string>());
+            var title = splittedVCard.FirstOrDefault(s => s.StartsWith(TitlePrefix))?.Replace(Separator, TwoDots).Split(TwoDots) ?? Array.Empty<string>();
+            contact.Title = string.Join(TwoDots, title.Length > 0 ? title.TakeLast(title.Length - 1) : Array.Empty<string>());
 
             var photoBase64 = splittedVCard.FirstOrDefault(s => s.StartsWith(PhotoPrefix))?.Split(PhotoPrefix).LastOrDefault();
-            contact.Photo = !string.IsNullOrWhiteSpace(photoBase64) ? "data:image/jpeg;base64," + photoBase64 : null;
+            if (!string.IsNullOrWhiteSpace(photoBase64))
+                contact.Photo = PhotoPrefixForDecoding + photoBase64;
 
             var emails = splittedVCard.Where(s => s.StartsWith(EmailPrefix));
             foreach (var item in emails)
             {
-                var emailArray = item.Replace(";", ":").Replace("=", ":").Split(":");
+                var emailArray = item.Replace(Separator, TwoDots).Replace(Transfer, TwoDots).Split(TwoDots);
 
                 EMail mail = new EMail
                 {
@@ -72,7 +82,7 @@ namespace VCardParser.Helpers
             var phones = splittedVCard.Where(s => s.StartsWith(PhonePrefix));
             foreach (var item in phones)
             {
-                var phoneArray = item.Replace(";", ":").Replace("=", ":").Replace(",", ":").Split(":");
+                var phoneArray = item.Replace(Separator, TwoDots).Replace(Transfer, TwoDots).Replace(Comma, TwoDots).Split(TwoDots);
 
                 Phone phone = new Phone
                 {
@@ -106,7 +116,9 @@ namespace VCardParser.Helpers
         {
             StringBuilder fw = new StringBuilder();
             fw.Append(Header);
-            fw.Append(NewLine);
+            fw.Append(NewLineLf);
+            fw.Append(Version);
+            fw.Append(NewLineLf);
 
             //Full Name
             if (!string.IsNullOrEmpty(contact.FirstName) || !string.IsNullOrEmpty(contact.LastName))
@@ -119,7 +131,7 @@ namespace VCardParser.Helpers
                 fw.Append(Separator);
                 fw.Append(contact.FirstName);
                 fw.Append(Separator);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Formatted Name
@@ -130,7 +142,7 @@ namespace VCardParser.Helpers
                 fw.Append(Charset);
                 fw.Append(TwoDots);
                 fw.Append(contact.FormattedName);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Organization name
@@ -146,7 +158,7 @@ namespace VCardParser.Helpers
                     fw.Append(Separator);
                     fw.Append(contact.OrganizationPosition);
                 }
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Title
@@ -157,7 +169,7 @@ namespace VCardParser.Helpers
                 fw.Append(Charset);
                 fw.Append(TwoDots);
                 fw.Append(contact.Title);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Photo
@@ -165,7 +177,7 @@ namespace VCardParser.Helpers
             {
                 fw.Append(PhotoPrefix);
                 fw.Append(contact.Photo);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Links
@@ -178,45 +190,45 @@ namespace VCardParser.Helpers
                     fw.Append(Dot);
                     fw.Append(WebSite);
                     fw.Append(contact.Links[i].Url);
-                    fw.Append(NewLine);
+                    fw.Append(NewLineLf);
                     fw.Append(ItemStr);
                     fw.Append(i);
                     fw.Append(Dot);
                     fw.Append(WebSitePrefix);
                     fw.Append(contact.Links[i].Title);
-                    fw.Append(NewLine);
+                    fw.Append(NewLineLf);
                 }
             }
 
             //Phones
-            foreach (var item in contact.Phones ?? new List<Phone>())
+            foreach (var item in contact?.Phones ?? new List<Phone>())
             {
                 fw.Append(PhonePrefix);
                 fw.Append(item.Type);
                 fw.Append(PhoneSubPrefix);
                 fw.Append(TwoDots);
                 fw.Append(item.Number);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Addresses
-            foreach (var item in contact.Addresses ?? new List<Address>())
+            foreach (var item in contact?.Addresses ?? new List<Address>())
             {
                 fw.Append(AddressPrefix);
                 fw.Append(item.Type);
                 fw.Append(AddressSubPrefix);
                 fw.Append(item.Description);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             //Email
-            foreach (var item in contact.Emails ?? new List<EMail>())
+            foreach (var item in contact?.Emails ?? new List<EMail>())
             {
                 fw.Append(EmailPrefix);
                 fw.Append(item.Type);
                 fw.Append(TwoDots);
                 fw.Append(item.Address);
-                fw.Append(NewLine);
+                fw.Append(NewLineLf);
             }
 
             fw.Append(Footer);
