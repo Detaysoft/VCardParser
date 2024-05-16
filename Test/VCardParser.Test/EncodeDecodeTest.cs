@@ -7,7 +7,7 @@ namespace VCardParser.Test
 {
     public class EncodeDecodeTest
     {
-        private readonly string encodedVCard = "BEGIN:VCARD\r\nVERSION:3.0\r\nN:LastName;FirstName;\r\nFN:FirstName LastName\r\nORG:Test;Tester\r\nTITLE:Software Developer\r\nitem0.URL:https://www.writeurlhere.com\r\nitem0.X-ABLabel:Other\r\nTEL;type=Home,VOICE:1111111111\r\nTEL;type=Work,VOICE:2222222222\r\nTEL;type=Cell,VOICE:+903333333333\r\nEMAIL;type=Other:email@email.com\r\nEMAIL;type=Work:email2@email.com\r\nEND:VCARD";
+        private readonly string encodedVCard = "BEGIN:VCARD\nVERSION:2.1\nN;CHARSET=UTF-8:LastName;FirstName;\nFN;CHARSET=UTF-8:FirstName LastName\nORG;CHARSET=UTF-8:Test;Tester\nTITLE;CHARSET=UTF-8:Software Developer\nitem0.URL:https://www.writeurlhere.com\nitem0.X-ABLabel:Other\nTEL;type=Home,VOICE:1111111111\nTEL;type=Work,VOICE:2222222222\nTEL;type=Cell,VOICE:+903333333333\nEMAIL;type=Other:email@email.com\nEMAIL;type=Work:email2@email.com\nEND:VCARD";
 
         private readonly Contact decodedVCard = new Contact
         {
@@ -49,7 +49,7 @@ namespace VCardParser.Test
         [Fact]
         public void FailureTest()
         {
-            Assert.NotEqual(encodedVCard.Replace("\r\n", ""), decodedVCard.EncodeVCard());
+            Assert.NotEqual(encodedVCard.Replace("\n", ""), decodedVCard.EncodeVCard());
         }
     }
 }
