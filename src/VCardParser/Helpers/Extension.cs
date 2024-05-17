@@ -62,11 +62,11 @@ namespace VCardParser.Helpers
             var title = splittedVCard.FirstOrDefault(s => s.StartsWith(TitlePrefix))?.Replace(Separator, TwoDots).Split(TwoDots) ?? Array.Empty<string>();
             contact.Title = string.Join(TwoDots, title.Length > 0 ? title.TakeLast(title.Length - 1) : Array.Empty<string>());
 
-            var photoBase64 = splittedVCard.FirstOrDefault(s => s.StartsWith(PhotoPrefix))?.Split(PhotoPrefix).LastOrDefault();
+            var photoBase64 = splittedVCard.FirstOrDefault(s => s.StartsWith(PhotoPrefix.Split(Separator).FirstOrDefault()))?.Split(TwoDots).LastOrDefault();
             if (!string.IsNullOrWhiteSpace(photoBase64))
                 contact.Photo = PhotoPrefixForDecoding + photoBase64;
 
-            var emails = splittedVCard.Where(s => s.StartsWith(EmailPrefix));
+            var emails = splittedVCard.Where(s => s.StartsWith(EmailPrefix.Split(Separator).FirstOrDefault()));
             foreach (var item in emails)
             {
                 var emailArray = item.Replace(Separator, TwoDots).Replace(Transfer, TwoDots).Split(TwoDots);
@@ -79,7 +79,7 @@ namespace VCardParser.Helpers
                 contact.Emails.Add(mail);
             }
 
-            var phones = splittedVCard.Where(s => s.StartsWith(PhonePrefix));
+            var phones = splittedVCard.Where(s => s.StartsWith(PhonePrefix.Split(Separator).FirstOrDefault()));
             foreach (var item in phones)
             {
                 var phoneArray = item.Replace(Separator, TwoDots).Replace(Transfer, TwoDots).Replace(Comma, TwoDots).Split(TwoDots);
@@ -107,6 +107,21 @@ namespace VCardParser.Helpers
                     };
                     contact.Links.Add(link);
                 }
+            }
+
+            var urls = splittedVCard.Where(s => s.StartsWith(WebSite));
+            foreach (var item in urls)
+            {
+                var urlArray = item.Split(TwoDots);
+
+                Link link = new Link
+                {
+                    Url = string.Join(TwoDots, urlArray.TakeLast(urlArray.Length - 1)),
+                    Title = string.Empty
+                };
+
+                if (!contact.Links.Any(l => l.Url.Equals(link.Url)))
+                    contact.Links.Add(link);
             }
 
             return contact;
