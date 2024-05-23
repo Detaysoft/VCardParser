@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using VCardParser.Models;
 
 namespace VCardParser.Helpers
@@ -36,6 +37,7 @@ namespace VCardParser.Helpers
         const string Comma = ",";
 
         const string PhotoPrefixForDecoding = "data:image/jpeg;base64,";
+        const string EncodingQuotedPrintablePrefixForDecoding = "ENCODING=QUOTED-PRINTABLE";
 
         public static Contact DecodeVCard(this string vCard)
         {
@@ -47,6 +49,17 @@ namespace VCardParser.Helpers
             };
 
             var splittedVCard = vCard.Replace(Charset + TwoDots, string.Empty).Replace(NewLineCrlf, NewLineLf).Replace(NewLineCr, NewLineLf).Split(NewLineLf).ToList();
+
+            for (int i = 0; i < splittedVCard.Count; i++)
+            {
+                if (splittedVCard[i].Contains(EncodingQuotedPrintablePrefixForDecoding))
+                {
+                    var encodedStringValueList = splittedVCard[i].Replace(TwoDots, Separator).Split(EncodingQuotedPrintablePrefixForDecoding);
+                    var encodedStringValue = encodedStringValueList.Last().Trim(';');
+                    var decodedStringValue = DecodeQuotedPrintables(encodedStringValue);
+                    splittedVCard[i] = splittedVCard[i].Replace(string.Join(string.Empty, EncodingQuotedPrintablePrefixForDecoding, TwoDots, encodedStringValue), decodedStringValue);
+                }
+            }
 
             contact.FormattedName = splittedVCard.FirstOrDefault(s => s.StartsWith(FormattedName))?.Replace(Separator, TwoDots).Split(TwoDots).LastOrDefault() ?? string.Empty;
 
@@ -250,5 +263,24 @@ namespace VCardParser.Helpers
 
             return fw.ToString();
         }
+
+        private static string DecodeQuotedPrintables(string input)
+        {
+            var occurences = new Regex("(\\=[0-9A-F][0-9A-F])+");
+            var matches = occurences.Matches(input);
+
+            foreach (Match match in matches)
+            {
+                byte[] bytes = new byte[match.Value.Length / 3];
+                for (int i = 0; i < match.Value.Length / 3; i++)
+                {
+                    bytes[i] = byte.Parse(match.Value.Substring(i * 3 + 1, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+                }
+                char[] hexChar = Encoding.UTF8.GetChars(bytes);
+                input = input.Replace(match.Value, string.Join(string.Empty, hexChar));
+            }
+            return input;
+        }
+
     }
 }
