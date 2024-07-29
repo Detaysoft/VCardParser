@@ -137,11 +137,13 @@ namespace VCardParser.Helpers
                     contact.Links.Add(link);
             }
 
-            return contact;
+            return contact.Distinct();
         }
 
         public static string EncodeVCard(this Contact contact)
         {
+            contact = contact.Distinct();
+
             StringBuilder fw = new StringBuilder();
             fw.Append(Header);
             fw.Append(NewLineLf);
@@ -282,5 +284,20 @@ namespace VCardParser.Helpers
             return input;
         }
 
+        private static Contact Distinct(this Contact contact)
+        {
+            if (contact != null)
+            {
+                if (contact.Phones != null && contact.Phones.Any())
+                    contact.Phones = contact.Phones.DistinctBy(p => p.Number).ToList();
+
+                if (contact.Links != null && contact.Links.Any())
+                    contact.Links = contact.Links.DistinctBy(p => p.Url).ToList();
+
+                if (contact.Emails != null && contact.Emails.Any())
+                    contact.Emails = contact.Emails.DistinctBy(p => p.Address).ToList();
+            }
+            return contact;
+        }
     }
 }

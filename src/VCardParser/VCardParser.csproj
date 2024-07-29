@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 
 		<PackageId>VCardParser</PackageId>
-		<Version>1.2.3</Version>
+		<Version>1.2.4</Version>
 		<Title>VCardParser</Title>
 		<Authors>Detaysoft</Authors>
 		<Copyright>Detaysoft</Copyright>
