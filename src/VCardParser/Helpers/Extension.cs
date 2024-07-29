@@ -48,7 +48,7 @@ namespace VCardParser.Helpers
                 Phones = new List<Phone>()
             };
 
-            var splittedVCard = vCard.Replace(Charset + TwoDots, string.Empty).Replace(NewLineCrlf, NewLineLf).Replace(NewLineCr, NewLineLf).Split(NewLineLf).ToList();
+            var splittedVCard = vCard.Replace(Charset + TwoDots, string.Empty).Replace(Charset + Separator, string.Empty).Replace(NewLineCrlf, NewLineLf).Replace(NewLineCr, NewLineLf).Split(NewLineLf).ToList();
 
             for (int i = 0; i < splittedVCard.Count; i++)
             {
@@ -125,12 +125,12 @@ namespace VCardParser.Helpers
             var urls = splittedVCard.Where(s => s.StartsWith(WebSite));
             foreach (var item in urls)
             {
-                var urlArray = item.Split(TwoDots);
+                var urlArray = item.Replace(Separator, TwoDots).Replace(Transfer, TwoDots).Split(TwoDots);
 
                 Link link = new Link
                 {
                     Url = string.Join(TwoDots, urlArray.TakeLast(urlArray.Length - 1)),
-                    Title = string.Empty
+                    Title = urlArray.Length > 2 ? urlArray[2] : string.Empty
                 };
 
                 if (!contact.Links.Any(l => l.Url.Equals(link.Url)))
